@@ -1,0 +1,84 @@
+.defaults: &defaults
+  working_directory: ~/circulate
+  docker:
+    - image: buildpack-deps:trusty
+
+.install-docker-client: &install-docker-client
+  name: Install docker client
+  command: |
+    DOCKER_CLIENT_VERSION="17.11.0-ce"
+    curl --location --output /tmp/docker-$DOCKER_CLIENT_VERSION.tgz https://download.docker.com/linux/static/edge/x86_64/docker-$DOCKER_CLIENT_VERSION.tgz
+    tar --extract --gzip --directory /tmp -f /tmp/docker-$DOCKER_CLIENT_VERSION.tgz
+    mv /tmp/docker/* /usr/bin
+.build-docker-image: &build-docker-image
+  steps:
+    - checkout
+    - setup_remote_docker
+    - run:
+        <<: *install-docker-client
+    - run:
+        name: Build docker image
+        command: docker image build --no-cache --tag $DOCKER_REPOSITORY:latest .
+    - run:
+        name: Install Goss and Dgoss
+        command: |
+          GOSS_VERSION="0.3.5"
+          curl -L https://github.com/aelsabbahy/goss/releases/download/v$GOSS_VERSION/goss-linux-amd64 -o /usr/local/bin/goss
+          curl -L https://raw.githubusercontent.com/aelsabbahy/goss/v$GOSS_VERSION/extras/dgoss/dgoss -o /usr/local/bin/dgoss
+          chmod +rx /usr/local/bin/goss
+          chmod +rx /usr/local/bin/dgoss
+    - run:
+        name: Test docker image
+        command: dgoss run $DOCKER_REPOSITORY:latest sleep 100
+    - run:
+        name: Save docker image to archive
+        command: |
+          mkdir -p /tmp/docker-images
+          docker save $DOCKER_REPOSITORY:latest --output /tmp/docker-images/image.tar.gz
+    - persist_to_workspace:
+         root: /tmp
+         paths:
+           - docker-images
+
+version: 2
+jobs:
+  build-and-test-docker-image:
+    <<: *defaults
+    <<: *build-docker-image
+
+  retag-and-push-into-registry:
+    <<: *defaults
+    steps:
+      - setup_remote_docker
+      - attach_workspace:
+          at: /tmp
+      - run:
+          <<: *install-docker-client
+      - run:
+          name: Load docker image
+          command: docker load --input /tmp/docker-images/image.tar.gz
+      - run:
+          name: Login to Docker hub
+          command: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+      - run:
+          name: Push image to docker registy
+          command: |
+            docker tag $DOCKER_REPOSITORY:latest $DOCKER_REPOSITORY:$CIRCLE_TAG
+            docker image push $DOCKER_REPOSITORY:$CIRCLE_TAG
+            docker image push $DOCKER_REPOSITORY:latest
+workflows:
+  version: 2
+  release-image:
+    jobs:
+      - build-and-test-docker-image:
+          filters:
+            tags:
+              only: /[0-9]+\.[0-9]+\.[0-9]+/
+      - retag-and-push-into-registry:
+          requires:
+              - build-and-test-docker-image
+          filters:
+            tags:
+              only: /[0-9]+\.[0-9]+\.[0-9]+/
+            branches:
+              ignore: /.*/
