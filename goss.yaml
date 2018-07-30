@@ -10,7 +10,7 @@ package:
   curl:
     installed: true
     versions:
-      - 7.61.0-r0"
+      - 7.61.0-r0
   git:
     installed: true
     versions:
