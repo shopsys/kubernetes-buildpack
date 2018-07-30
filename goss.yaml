@@ -1,0 +1,66 @@
+package:
+  bash:
+    installed: true
+    versions:
+      - 4.3.48-r1
+  ca-certificates:
+    installed: true
+    versions:
+      - 20161130-r2
+  curl:
+    installed: true
+    versions:
+      - 7.60.0-r1
+  git:
+    installed: true
+    versions:
+      - 2.13.7-r0
+  gnupg:
+    installed: true
+    versions:
+      - 2.1.20-r1
+  openssh-client:
+    installed: true
+    versions:
+      - 7.5_p1-r2
+  openssl:
+    installed: true
+    versions:
+      - 1.0.2o-r0
+  tar:
+    installed: true
+    versions:
+      - 1.29-r1
+  unzip:
+    installed: true
+    versions:
+      - 6.0-r2
+  wget:
+    installed: true
+    versions:
+      - 1.19.5-r0
+command:
+  docker --version:
+    exit-status: 0
+    stdout:
+      - {{.Env.DOCKER_CLIENT_VERSION}}
+  goss --version:
+    exit-status: 0
+    stdout:
+      - {{.Env.GOSS_VERSION}}
+  helm version --client:
+    exit-status: 0
+    stdout:
+      - {{.Env.HELM_VERSION}}
+  kubectl version --client:
+    exit-status: 0
+    stdout:
+      - {{.Env.KUBECTL_VERSION}}
+  terraform --version:
+    exit-status: 0
+    stdout:
+      - {{.Env.TERRAFORM_VERSION}}
+  yq --version:
+    exit-status: 0
+    stdout:
+      - {{.Env.YQ_VERSION}}
