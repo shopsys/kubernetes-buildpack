@@ -8,6 +8,8 @@ ENV HELM_VERSION="2.9.1"
 ENV KUBECTL_VERSION="1.11.1"
 ENV GOSS_VERSION="0.3.6"
 ENV YQ_VERSION="2.1.1"
+ENV CLOUD_SDK_VERSION 206.0.0
+ENV PATH /google-cloud-sdk/bin:$PATH
 
 WORKDIR /tmp
 
@@ -46,3 +48,22 @@ RUN apk add --update --no-cache \
         chmod +rx /usr/local/bin/dgoss && \
         wget --output-document=/usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/$YQ_VERSION/yq_linux_amd64 && \
         chmod +x /usr/local/bin/yq
+
+RUN apk --no-cache add \
+        curl \
+        python \
+        py-crcmod \
+        bash \
+        libc6-compat \
+        openssh-client \
+        git \
+    && curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
+    tar xzf google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
+    rm google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
+    ln -s /lib /lib64 && \
+    gcloud config set core/disable_usage_reporting true && \
+    gcloud config set component_manager/disable_update_check true && \
+    gcloud config set metrics/environment github_docker_image && \
+    gcloud --version
+
+VOLUME ["/root/.config"]
