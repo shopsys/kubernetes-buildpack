@@ -9,7 +9,7 @@ ENV KUBECTL_VERSION="1.11.1"
 ENV GOSS_VERSION="0.3.6"
 ENV YQ_VERSION="2.1.1"
 ENV CLOUD_SDK_VERSION 206.0.0
-ENV PATH /google-cloud-sdk/bin:$PATH
+ENV PATH /tmp/google-cloud-sdk/bin:$PATH
 
 WORKDIR /tmp
 
