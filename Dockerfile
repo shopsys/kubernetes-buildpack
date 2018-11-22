@@ -5,6 +5,7 @@ ENV TERRAFORM_VERSION="0.11.7"
 ENV KUBECTL_VERSION="1.11.1"
 ENV YQ_VERSION="2.1.1"
 ENV CLOUD_SDK_VERSION="206.0.0"
+ENV KUSTOMIZE_VERSION="1.0.10"
 ENV PATH /tmp/google-cloud-sdk/bin:$PATH
 
 WORKDIR /tmp
@@ -31,7 +32,9 @@ RUN apk add --update --no-cache \
         curl --location https://storage.googleapis.com/kubernetes-release/release/v$KUBECTL_VERSION/bin/linux/amd64/kubectl --output /usr/bin/kubectl && \
         chmod +x /usr/bin/kubectl && \
         wget --output-document=/usr/local/bin/yq https://github.com/mikefarah/yq/releases/download/$YQ_VERSION/yq_linux_amd64 && \
-        chmod +x /usr/local/bin/yq
+        chmod +x /usr/local/bin/yq && \
+        curl --location https://github.com/kubernetes-sigs/kustomize/releases/download/v${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64 --output /usr/local/bin/kustomize && \
+        chmod +x /usr/local/bin/kustomize
 
 RUN apk --no-cache add \
         curl \

@@ -15,6 +15,8 @@ Docker
 
 [Google Cloud SDK](https://cloud.google.com/sdk/)
 
+[Kustomize](https://github.com/kubernetes-sigs/kustomize)
+
 ## How to use
 Basic concept of usage of this image is to mount your repository into container volume from which you can perform all your tasks related to deploying Shopsys Framework.
 
