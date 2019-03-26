@@ -29,8 +29,8 @@ docker run \
     -v $PWD:/tmp \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v ~/.kube/config:/root/.kube/config \
-    shopsys/kubernetes-buildpack
-    --rm 
+    --rm \
+    shopsys/kubernetes-buildpack \
     <your scripts>
 ```
 
