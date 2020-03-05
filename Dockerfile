@@ -2,9 +2,9 @@ FROM alpine:3.6
 
 ENV DOCKER_CLIENT_VERSION="19.03.1"
 ENV TERRAFORM_VERSION="0.11.7"
-ENV KUBECTL_VERSION="1.13.5"
+ENV KUBECTL_VERSION="1.17.3"
 ENV YQ_VERSION="2.1.1"
-ENV KUSTOMIZE_VERSION="1.0.10"
+ENV KUSTOMIZE_VERSION="3.5.4"
 ENV CLOUD_SDK_VERSION="206.0.0"
 ENV PATH /opt/google-cloud-sdk/bin:$PATH
 
@@ -51,7 +51,9 @@ RUN curl --location https://github.com/mikefarah/yq/releases/download/${YQ_VERSI
     yq --version
 
 # Install Kustomize
-RUN curl --location https://github.com/kubernetes-sigs/kustomize/releases/download/v${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64 --output /usr/local/bin/kustomize && \
+RUN curl --location https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv${KUSTOMIZE_VERSION}/kustomize_v${KUSTOMIZE_VERSION}_linux_amd64.tar.gz --output kustomize.tar.gz && \
+    tar xzf kustomize.tar.gz && \
+    mv kustomize /usr/local/bin/kustomize && \
     chmod +x /usr/local/bin/kustomize && \
     kustomize version
 
