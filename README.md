@@ -9,11 +9,7 @@ Docker
 
 [Kubernetes - kubectl](https://kubernetes.io/)
 
-[Terraform](https://www.terraform.io/)
-
 [Yq](https://github.com/kislyuk/yq)
-
-[Google Cloud SDK](https://cloud.google.com/sdk/)
 
 [Kustomize](https://github.com/kubernetes-sigs/kustomize)
 
@@ -42,6 +38,10 @@ You can extend our image in `Dockerfile` and install applications and tools that
 ```Dockerfile
 FROM shopsys/kubernetes-buildpack
 
-# install tools you want here, eg. Python
-RUN apk add --update --no-cache python3
+# install tools you want here, eg. Terraform
+RUN curl --location https://releases.hashicorp.com/terraform/1.5.3/terraform_1.5.3_linux_amd64.zip --output terraform.zip && \
+    unzip terraform.zip && \
+    mv terraform /usr/local/bin/terraform && \
+    terraform --version && \
+    rm -rf /tmp/*
 ```
