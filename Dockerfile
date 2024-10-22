@@ -1,6 +1,6 @@
 FROM docker:24.0.6
 
-ENV KUBECTL_VERSION="1.18.8"
+ENV KUBECTL_VERSION="1.31.1"
 ENV YQ_VERSION="2.1.1"
 ENV KUSTOMIZE_VERSION="3.8.5"
 
@@ -26,7 +26,7 @@ RUN apk add --update --no-cache \
     && rm -rf /var/cache/apk/*
 
 # Install Kubectl
-RUN curl --location https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl --output /usr/local/bin/kubectl && \
+RUN curl --location https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl --output /usr/local/bin/kubectl && \
     chmod +x /usr/local/bin/kubectl && \
     kubectl version --client -o yaml
 
