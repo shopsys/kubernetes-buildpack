@@ -23,3 +23,4 @@ RUN apk add --update --no-cache \
     kustomize \
     && rm -rf /var/cache/apk/*
 
+RUN mkdir -p /root/.kube/
