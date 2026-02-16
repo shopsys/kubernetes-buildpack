@@ -1,4 +1,4 @@
-FROM docker:24.0.6
+FROM docker:29.1.2
 
 ENV KUBECTL_VERSION="1.31.1"
 ENV YQ_VERSION="2.1.1"
