@@ -24,3 +24,5 @@ RUN apk add --update --no-cache \
     && rm -rf /var/cache/apk/*
 
 RUN mkdir -p /root/.kube/
+
+ENV PIP_BREAK_SYSTEM_PACKAGES=1
