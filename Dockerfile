@@ -1,4 +1,4 @@
-FROM docker:29.1.2-alpine3.23
+FROM docker:29.2.1-cli
 
 WORKDIR /tmp
 
@@ -7,17 +7,9 @@ RUN apk add --update --no-cache \
     bash \
     ca-certificates \
     curl \
-    git \
-    gnupg \
-    libc6-compat \
-    openssh-client \
     openssl \
     python3 \
     py3-pip \
-    py-crcmod \
-    tar \
-    unzip \
-    wget \
     kubectl \
     yq-go \
     kustomize \
